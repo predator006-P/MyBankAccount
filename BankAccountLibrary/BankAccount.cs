@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace MyBankAccount
+namespace BankAccountLibrary
 {
     public class BankAccount
     {
@@ -34,18 +34,22 @@ namespace MyBankAccount
             accountNumberSeed++;
         }
 
+
         public void MakeDeposit(decimal amount, DateTime date, string note)
         {
+            var report = new StringBuilder();
             if (amount <= 0)
             {
                 throw new ArgumentOutOfRangeException(nameof(amount), "Amount of deposit must be positive");
             }
             var deposit = new Transactions(amount, date, note);
             allTransactions.Add(deposit);
+            report.AppendLine($"{deposit.Date.ToShortDateString()}\t{deposit.Amount}\t{deposit.Notes}");
         }
 
         public void MakeWithdrawal(decimal amount, DateTime date, string note)
         {
+            var report = new StringBuilder();
             if (amount <= 0)
             {
                 throw new ArgumentOutOfRangeException(nameof(amount), "Amount of withdrawal must be positive");
@@ -56,16 +60,19 @@ namespace MyBankAccount
             }
             var withdrawal = new Transactions(-amount, date, note);
             allTransactions.Add(withdrawal);
+            report.AppendLine($"{withdrawal.Date.ToShortDateString()}\t{withdrawal.Amount}\t{withdrawal.Notes}");
         }
 
         public string GetAccountHistory()
         {
             var report = new StringBuilder();
+            report.AppendLine("Date\t\tAmount\tNote");
             foreach (var item in allTransactions)
             {
-                report.AppendLine($"{item.Date}\t{item.Amount}\t{item.Notes}");
+                report.AppendLine($"{item.Date.ToShortDateString()}\t{item.Amount}\t{item.Notes}");
             }
             return report.ToString();
         }
+
     }
 }
